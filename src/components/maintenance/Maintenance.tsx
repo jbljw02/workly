@@ -2,14 +2,15 @@
 
 import HorizontalDivider from '../editor/child/divider/HorizontalDivider';
 import CommonButton from '../button/CommonButton';
-import { useRouter } from 'next/navigation';
 import CautionCircleIcon from '../../../public/svgs/caution-circle.svg';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import logout from '@/utils/auth/logout';
 
 export default function Maintenance() {
-    const router = useRouter();
+    const dispatch = useAppDispatch();
 
-    const handleGoHome = () => {
-        router.push('/');
+    const handleGoHome = async () => {
+        await logout(dispatch);
     };
 
     return (
