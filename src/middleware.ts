@@ -5,6 +5,11 @@ export async function middleware(req: NextRequest) {
     const demoToken = req.cookies.get('demoToken')?.value;
     const { pathname } = req.nextUrl;
 
+    // 임시 점검: /editor/* 경로 접근 시 /maintenance로 리다이렉트
+    if (pathname.startsWith('/editor')) {
+        return NextResponse.redirect(new URL('/maintenance', req.url));
+    }
+
     // 데모 토큰이 있는 경우
     if (demoToken) {
         try {
@@ -57,8 +62,15 @@ export async function middleware(req: NextRequest) {
             }
 
             // 인증된 사용자가 로그인/회원가입 페이지 접근시 /editor/home으로 리다이렉션
+            // 단, /maintenance에서 온 경우는 무한 루프 방지를 위해 제외
             if (['/', '/login', '/signup'].includes(pathname)) {
-                return NextResponse.redirect(new URL('/editor/home', req.url));
+                const referer = req.headers.get('referer');
+                const isFromMaintenance = referer?.includes('/maintenance');
+
+                // maintenance에서 온 경우가 아니면 /editor/home으로 리다이렉트
+                if (!isFromMaintenance) {
+                    return NextResponse.redirect(new URL('/editor/home', req.url));
+                }
             }
         } catch (error) {
             return NextResponse.redirect(new URL('/', req.url));
