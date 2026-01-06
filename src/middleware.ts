@@ -67,7 +67,6 @@ export async function middleware(req: NextRequest) {
                 const referer = req.headers.get('referer');
                 const isFromMaintenance = referer?.includes('/maintenance');
 
-                // maintenance에서 온 경우가 아니면 /editor/home으로 리다이렉트
                 if (!isFromMaintenance) {
                     return NextResponse.redirect(new URL('/editor/home', req.url));
                 }
