@@ -6,9 +6,9 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     // 임시 점검: /editor/* 경로 접근 시 /maintenance로 리다이렉트
-    if (pathname.startsWith('/editor')) {
-        return NextResponse.redirect(new URL('/maintenance', req.url));
-    }
+    // if (pathname.startsWith('/editor')) {
+    //     return NextResponse.redirect(new URL('/maintenance', req.url));
+    // }
 
     // 데모 토큰이 있는 경우
     if (demoToken) {
